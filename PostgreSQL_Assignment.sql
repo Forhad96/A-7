@@ -112,8 +112,9 @@ VALUES (1, 1),
 
 --------------------------------------------------- Start solving Database Query---------------------------------------------------
 
--- Query 1:-
+-- Query 1:
 -- Insert a new student record with the following details:
+-- This inserts a new student named 'Forhad' with specific marks and details into the `students` table.
 INSERT INTO
     students (
         student_name,
@@ -134,57 +135,73 @@ VALUES (
 
 -- Query 2:
 -- Retrieve the names of all students who are enrolled in the course titled 'Next.js'.
+-- Uses JOINs to link students with courses through the enrollment table.
 SELECT student_name
 FROM
     enrollment
-    JOIN students on students.student_id = enrollment.student_id
-    JOIN courses on courses.course_id = enrollment.course_id
+    JOIN students ON students.student_id = enrollment.student_id
+    JOIN courses ON courses.course_id = enrollment.course_id
 WHERE
     courses.course_name = 'Next.js';
 
 -- Query 3:
 -- Update the status of the student with the highest total (frontend_mark + backend_mark) to 'Awarded'.
-
+-- Finds the student with the maximum sum of frontend and backend marks, then updates their status.
 UPDATE students
-SET status = 'Awarded'
-WHERE
-    (frontend_mark + backend_mark) =
-(SELECT max(frontend_mark + backend_mark)
-FROM students);
-
+SET
+    status = 'Awarded'
+WHERE (frontend_mark + backend_mark) = (
+        SELECT MAX(frontend_mark + backend_mark)
+        FROM students
+    );
 
 -- Query 4:
--- Delete all courses that have no students enrolled. 
-
+-- Delete all courses that have no students enrolled.
+-- This deletes all courses that are not listed in the `enrollment` table.
 DELETE FROM courses
-    WHERE course_id not in (SELECT course_id from enrollment)
-
-
+WHERE
+    course_id NOT IN (
+        SELECT course_id
+        FROM enrollment
+    );
 
 -- Query 5:
 -- Retrieve the names of students using a limit of 2, starting from the 3rd student.
-SELECT student_name FROM students OFFSET 1 LIMIT 2 
-
-
-
+-- OFFSET skips the first 2 records, and LIMIT selects the next 2 records.
+SELECT student_name FROM students OFFSET 2 LIMIT 2;
 
 -- Query 6:
 -- Retrieve the course names and the number of students enrolled in each course.
-
-SELECT course_name,count(*)as students_enrolled FROM enrollment
-    JOIN courses on courses.course_id = enrollment.course_id
-    GROUP BY course_name
-
+-- Counts the number of enrollments for each course and groups them by course name.
+SELECT
+    course_name,
+    COUNT(*) AS students_enrolled
+FROM enrollment
+    JOIN courses ON courses.course_id = enrollment.course_id
+GROUP BY
+    course_name;
 
 -- Query 7:
 -- Calculate and display the average age of all students.
-SELECT ROUND(AVG(age), 2) FROM students 
+-- Computes the average age and rounds it to 2 decimal places.
+SELECT ROUND(AVG(age), 2) FROM students;
 
+-- Query 8:
+-- Retrieve the names of students whose email addresses contain 'example.com'.
+-- Filters students by searching for 'example.com' within their email addresses.
+SELECT student_name FROM students WHERE email LIKE '%example.com%';
 
+------------------------------------------------View Table Data-----------------------------------------------------
 SELECT * FROM students
 
 SELECT * FROM courses
 
 SELECT * FROM enrollment
+
+--------------------------------Drop Table---------------------------------------------------------------------------
+
+DROP TABLE students
+
+DROP TABLE courses
 
 DROP TABLE enrollment
