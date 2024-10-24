@@ -145,14 +145,26 @@ WHERE
 -- Query 3:
 -- Update the status of the student with the highest total (frontend_mark + backend_mark) to 'Awarded'.
 
--- SELECT max(frontend_mark + frontend_mark) form
-
 UPDATE students
 SET status = 'Awarded'
 WHERE
-    frontend_mark + backend_mark =
+    (frontend_mark + backend_mark) =
 (SELECT max(frontend_mark + backend_mark)
-FROM students)
+FROM students);
+
+
+-- Query 4:
+-- Delete all courses that have no students enrolled. 
+
+DELETE FROM courses
+    WHERE course_id not in (SELECT course_id from enrollment)
+
+
+
+
+
+
+
 
 
 
