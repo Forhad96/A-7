@@ -171,11 +171,14 @@ SELECT student_name FROM students OFFSET 1 LIMIT 2
 -- Query 6:
 -- Retrieve the course names and the number of students enrolled in each course.
 
-SELECT course_name,count(*)as student_enrolled_number FROM enrollment
+SELECT course_name,count(*)as students_enrolled FROM enrollment
     JOIN courses on courses.course_id = enrollment.course_id
     GROUP BY course_name
 
 
+-- Query 7:
+-- Calculate and display the average age of all students.
+SELECT ROUND(AVG(age), 2) FROM students 
 
 
 SELECT * FROM students
