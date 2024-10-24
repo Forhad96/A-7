@@ -2,6 +2,20 @@
 
 -- Create database
 create DATABASE university_db
+-- end
+
+
+
+
+
+
+
+
+
+
+
+
+---------------------------------------Table creation---------------------------------------
 -- Creating a student table
 CREATE TABLE students (
     student_id SERIAL PRIMARY KEY,
@@ -11,34 +25,39 @@ CREATE TABLE students (
     frontend_mark INTEGER,
     backend_mark INTEGER,
     status VARCHAR(25)
-)
+);
+
 -- Creating a course table
-CREATE TABLE course (
+CREATE TABLE courses (
     course_id SERIAL PRIMARY KEY,
     course_name VARCHAR(255),
     credits INTEGER
-)
-
-
--- creating sample course
-INSERT INTO course (
-    course_id,
-    course_name,
-    credits
-)
-VALUES(1, 'Next.js', 3),
-(2, 'React.js', 4),
-(3, 'Databases', 3),
-(4, 'Prisma', 3);
+);
 
 -- Creating a enrollment table
+
 CREATE TABLE enrollment (
     enrollment_id SERIAL PRIMARY KEY,
-    student_id INTEGER REFERENCES (student_id),
-    course_id INTEGER REFERENCES (course_id)
-)
--- Inserting sample student data
+    student_id INTEGER REFERENCES students (student_id),
+    course_id INTEGER REFERENCES courses (course_id)
+);
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+----------------------------------- Insert sample data----------------------------------------
+-- Inserting student data
 INSERT INTO
     students (
         student_name,
@@ -71,7 +90,8 @@ VALUES (
         37,
         46,
         NULL
-    ) (
+    ),
+    (
         'Rafi',
         24,
         'rafi@example.com',
@@ -96,11 +116,46 @@ VALUES (
         NULL
     );
 
--- start solving query
+-- Inserting  course data
+INSERT INTO
+    courses (
+        course_id,
+        course_name,
+        credits
+    )
+VALUES (1, 'Next.js', 3),
+    (2, 'React.js', 4),
+    (3, 'Databases', 3),
+    (4, 'Prisma', 3);
+
+-- inserting enrolled data
+INSERT INTO
+    enrollment (course_id, student_id)
+VALUES (1, 1),
+    (1, 2),
+    (2, 1),
+    (3, 2);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--------------------------------------------------- Start solving Database Query---------------------------------------------------
 
 -- Query 1:-
 -- Insert a new student record with the following details:
-
 INSERT INTO
     students (
         student_name,
@@ -117,12 +172,23 @@ VALUES (
         40,
         50,
         NULL
-    )
-    -- Query 2:
-    -- Retrieve the names of all students who are enrolled in the course titled 'Next.js'.
+    );
+
+-- Query 2:
+-- Retrieve the names of all students who are enrolled in the course titled 'Next.js'.
+SELECT student_name FROM enrollment
+    JOIN students on students.student_id = enrollment.student_id
+    JOIN courses on courses.course_id = enrollment.course_id
+    WHERE courses.course_name = 'Next.js'
+
+
+
+
 
 SELECT * FROM students
 
-SELECT * FROM course
+SELECT * FROM courses
 
-DROP TABLE students
+SELECT * FROM enrollment
+
+DROP TABLE enrollment
