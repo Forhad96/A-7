@@ -163,19 +163,20 @@ DELETE FROM courses
 
 -- Query 5:
 -- Retrieve the names of students using a limit of 2, starting from the 3rd student.
-SELECT student_name FROM students OFFSET 2 LIMIT 2
+SELECT student_name FROM students OFFSET 1 LIMIT 2 
 
 
 
 
+-- Query 6:
+-- Retrieve the course names and the number of students enrolled in each course.
+
+SELECT course_name,count(*)as student_enrolled_number FROM enrollment
+    JOIN courses on courses.course_id = enrollment.course_id
+    GROUP BY course_name
 
 
 
-
-SELECT status, max(frontend_mark + backend_mark) as highest_total
-FROM students
-GROUP BY
-    student_name,status
 
 SELECT * FROM students
 
