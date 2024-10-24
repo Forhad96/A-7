@@ -3,18 +3,6 @@
 -- Create database
 create DATABASE university_db
 -- end
-
-
-
-
-
-
-
-
-
-
-
-
 ---------------------------------------Table creation---------------------------------------
 -- Creating a student table
 CREATE TABLE students (
@@ -41,20 +29,6 @@ CREATE TABLE enrollment (
     student_id INTEGER REFERENCES students (student_id),
     course_id INTEGER REFERENCES courses (course_id)
 );
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 ----------------------------------- Insert sample data----------------------------------------
 -- Inserting student data
@@ -136,22 +110,6 @@ VALUES (1, 1),
     (2, 1),
     (3, 2);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 --------------------------------------------------- Start solving Database Query---------------------------------------------------
 
 -- Query 1:-
@@ -176,14 +134,33 @@ VALUES (
 
 -- Query 2:
 -- Retrieve the names of all students who are enrolled in the course titled 'Next.js'.
-SELECT student_name FROM enrollment
+SELECT student_name
+FROM
+    enrollment
     JOIN students on students.student_id = enrollment.student_id
     JOIN courses on courses.course_id = enrollment.course_id
-    WHERE courses.course_name = 'Next.js'
+WHERE
+    courses.course_name = 'Next.js';
+
+-- Query 3:
+-- Update the status of the student with the highest total (frontend_mark + backend_mark) to 'Awarded'.
+
+-- SELECT max(frontend_mark + frontend_mark) form
+
+UPDATE students
+SET status = 'Awarded'
+WHERE
+    frontend_mark + backend_mark =
+(SELECT max(frontend_mark + backend_mark)
+FROM students)
 
 
 
 
+SELECT status, max(frontend_mark + backend_mark) as highest_total
+FROM students
+GROUP BY
+    student_name,status
 
 SELECT * FROM students
 
